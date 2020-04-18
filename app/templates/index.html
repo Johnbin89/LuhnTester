@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+{{ block.super }}
+
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+
+{% endblock %}
+
+{% block page_content %}
+<div class="number_field">
+  <h3>Find Check Digit:</h3>
+  <form action="" method="POST">
+    {% csrf_token %}
+    <p>
+      {{ digit_form.number.label_tag}}
+      {{ digit_form.number }}
+    </p>
+    <button type="submit" name="btn_check_digit">Submit</button>
+  </form>
+  <br>
+  {% if digit_form.errors %}
+  {% for err in digit_form.errors.values  %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ err }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  {% if check_digit is not None %}
+  <div class="alert alert-info alert-dismissible fade show" role="alert">
+    Check digit : {{ check_digit }}, Number: {{ string_number }}{{check_digit }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endif %}
+</div>
+<br>
+<br>
+<div class="number_field">
+  <h3>Verify Credit Card number:</h3>
+  <form action="" method="POST">
+    {% csrf_token %}
+    <p>
+      {{ cardno_form.card_number.label_tag}}
+      {{ cardno_form.card_number }}
+    </p>
+    <button type="submit" name="btn_verify">Submit</button>
+  </form>
+  <br>
+  {% if cardno_form.errors %}
+  {% for err in cardno_form.errors.values  %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ err }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  {% if validity  %}
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ string_number }} is <strong>valid</strong> credit card number.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% elif validity is False %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ string_number }} is <strong>invalid</strong> credit card number.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+{% endblock %}
